@@ -1,1 +1,2 @@
-const unused = 42
+const used = 42;
+console.log(used);
