@@ -1,8 +1,6 @@
-# .github/workflows/ci.yml
 name: CI
 
 on:
-  # Run when a pull request is opened, synchronized (new commits), or reopened
   pull_request:
     branches:
       - main
@@ -12,6 +10,10 @@ jobs:
   ci:
     name: CI pipeline
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: codebase/rdicidr-0.1.0
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,7 +26,12 @@ jobs:
           cache-dependency-path: codebase/rdicidr-0.1.0/package-lock.json
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Lint (ESLint)
         run: npm run lint
