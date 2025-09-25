@@ -1,0 +1,51 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  # Run when a pull request is opened, synchronized (new commits), or reopened
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  ci:
+    name: CI pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          # npm ci is preferred for CI when package-lock.json exists
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: Prettier (format check)
+        # Option A: check formatting (will fail if files are not formatted)
+        run: npm run prettier -- --check .
+        # Option B (alternate): to auto-write formatting instead, use:
+        # run: npm run prettier -- --write .
+
+      - name: Run tests (Jest)
+        env:
+          CI: true
+        run: |
+          # ensure tests run in CI mode and don't start watcher
+          npm test -- --watchAll=false
+
+      - name: Build
+        run: npm run build
