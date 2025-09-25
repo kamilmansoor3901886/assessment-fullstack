@@ -18,10 +18,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js 18.x
+      - name: Use Node.js 15.x
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '15.x'
           cache: 'npm'
           cache-dependency-path: codebase/rdicidr-0.1.0/package-lock.json
 
