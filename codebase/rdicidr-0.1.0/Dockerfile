@@ -1,21 +1,23 @@
-FROM node:15 as builder
+# Use an official Node.js runtime as base
+FROM node:15-alpine
 
-WORKDIR
+# Set working directory
+WORKDIR /usr/src/app
 
-COPY
+# Copy package.json and package-lock.json first (for caching)
+COPY package*.json ./
 
-RUN 
+# Install dependencies
+RUN npm install
 
-COPY
+# Copy rest of the application
+COPY . .
 
-RUN 
+# Build the app (optional if your app has build step)
+RUN npm run build
 
-FROM
+# Expose port 8080
+EXPOSE 8080
 
-WORKDIR
-
-COPY
-
-RUN 
-
-ENTRYPOINT 
+# Start the app
+CMD ["npm", "start"]
