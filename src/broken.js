@@ -1,1 +1,1 @@
-const unused = 42
+const unused =
