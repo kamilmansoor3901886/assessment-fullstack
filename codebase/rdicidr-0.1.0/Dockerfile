@@ -1,23 +1,13 @@
-# Use an official Node.js runtime as base
-FROM node:15-alpine
-
-# Set working directory
+# Stage 1: Build React app
+FROM node:15-alpine AS build
 WORKDIR /usr/src/app
-
-# Copy package.json and package-lock.json first (for caching)
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
-
-# Copy rest of the application
 COPY . .
-
-# Build the app (optional if your app has build step)
 RUN npm run build
 
-# Expose port 8080
+# Stage 2: Serve with nginx
+FROM nginx:alpine
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
 EXPOSE 8080
-
-# Start the app
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]
