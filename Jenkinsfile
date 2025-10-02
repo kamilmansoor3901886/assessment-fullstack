@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                echo 'Hello World code from main branch'
+                script {
+                    echo "Hello World - Branch name: ${env.BRANCH_NAME}"
+                }
             }
         }
     }
