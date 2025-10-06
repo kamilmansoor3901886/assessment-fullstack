@@ -1,14 +1,13 @@
 pipeline {
     agent any
 
-    triggers {
-        githubPush()
-    }
-
     stages {
-        stage('Hello') {
+        stage('Hello World') {
             steps {
-                echo 'Hello World!'
+                script {
+                    echo "Hello from Jenkins!"
+                    echo "Current branch: ${env.BRANCH_NAME}"
+                }
             }
         }
     }
